@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Student Registration</title>
+  <link rel="stylesheet" href="/assets/register.css" />
+  <style>
+    /* If external CSS doesn't work, internal fallback styles */
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom right, #1e1e2f, #282c34);
+      color: #ffffff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    .form-container {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 30px 40px;
+      border-radius: 15px;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(10px);
+    }
+
+    .form-container h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #ffcc70;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 5px;
+      color: #ccc;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      outline: none;
+      background-color: #ffffff12;
+      color: white;
+      font-size: 14px;
+    }
+
+    input:focus {
+      background-color: #ffffff1f;
+      box-shadow: 0 0 0 2px #ffcc70;
+    }
+
+    .password-container {
+      position: relative;
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+      color: #ccc;
+    }
+
+    .register-btn {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border: none;
+      background-color: #ffcc70;
+      color: black;
+      font-weight: bold;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .register-btn:hover {
+      background-color: #ffc347;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>Student Registration</h2>
+    <form id="registerForm">
+      <div class="form-group"><label for="name">Full Name</label><input type="text" id="name" required /></div>
+      <div class="form-group"><label for="email">Email ID</label><input type="email" id="email" required /></div>
+      <div class="form-group"><label for="username">Username</label><input type="text" id="username" required /></div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="password-container">
+          <input type="password" id="password" required />
+          <button type="button" class="toggle-password" id="togglePassword">👁️</button>
+        </div>
+      </div>
+      <div class="form-group"><label for="address">Address</label><input type="text" id="address" required /></div>
+      <div class="form-group"><label for="phone">Phone Number</label><input type="text" id="phone" required /></div>
+      <div class="form-group"><label for="school">School</label><input type="text" id="school" required /></div>
+      <div class="form-group"><label for="studentClass">Class</label><input type="text" id="studentClass" required /></div>
+      <div class="form-group"><label for="division">Division</label><input type="text" id="division" required /></div>
+      <div class="form-group"><label for="percentage">Last Exam Percentage</label><input type="number" id="percentage" required /></div>
+      <div class="form-group"><label for="subjects">Favorite Subjects</label><input type="text" id="subjects" required /></div>
+      <div class="form-group"><label for="hobbies">Hobbies</label><input type="text" id="hobbies" required /></div>
+      <div class="form-group"><label for="parent_phone">Parent Phone Number</label><input type="text" id="parent_phone" required /></div>
+      <div class="form-group"><label for="progress_math">Math Progress</label><input type="number" id="progress_math" required /></div>
+      <div class="form-group"><label for="progress_science">Science Progress</label><input type="number" id="progress_science" required /></div>
+      <div class="form-group"><label for="progress_english">English Progress</label><input type="number" id="progress_english" required /></div>
+      <button type="submit" class="register-btn">Register</button>
+    </form>
+  </div>
+
+  <!-- NO CHANGES IN <head> section needed -->
+<!-- Just go down to the <script> section for updates -->
+
+<script>
+  const togglePassword = document.getElementById("togglePassword");
+  const passwordInput = document.getElementById("password");
+
+  togglePassword.addEventListener("click", function () {
+    const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
+    passwordInput.setAttribute("type", type);
+    this.textContent = type === "password" ? "👁️" : "🙈";
+  });
+
+  document.getElementById("registerForm").onsubmit = async function (e) {
+    e.preventDefault();
+
+    // Basic frontend validation for phone number length (optional but useful)
+    const phone = document.getElementById("phone").value.trim();
+    if (phone.length !== 10 || !/^\d{10}$/.test(phone)) {
+      return alert("Please enter a valid 10-digit phone number.");
+    }
+
+    const studentData = {
+      name: document.getElementById("name").value.trim(),
+      email: document.getElementById("email").value.trim(),
+      username: document.getElementById("username").value.trim(),
+      password: document.getElementById("password").value,
+      address: document.getElementById("address").value.trim(),
+      phone,
+      school: document.getElementById("school").value.trim(),
+      studentClass: document.getElementById("studentClass").value.trim(),
+      division: document.getElementById("division").value.trim(),
+      percentage: parseFloat(document.getElementById("percentage").value),
+      subjects: document.getElementById("subjects").value.trim(),
+      hobbies: document.getElementById("hobbies").value.trim(),
+      parent_phone: document.getElementById("parent_phone").value.trim(),
+      progress_math: parseFloat(document.getElementById("progress_math").value),
+      progress_science: parseFloat(document.getElementById("progress_science").value),
+      progress_english: parseFloat(document.getElementById("progress_english").value)
+    };
+
+    try {
+      const res = await fetch("/register-student", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(studentData)
+      });
+
+      const result = await res.text();
+      if (res.ok) {
+        alert("✅ Registration successful!\nRedirecting to login...");
+        window.location.href = "/login.html";
+      } else {
+        alert("❌ Registration failed: " + result);
+      }
+    } catch (err) {
+      console.error("Error:", err);
+      alert("⚠️ Server error. Please try again.");
+    }
+  };
+</script>
+
+</body>
+</html>

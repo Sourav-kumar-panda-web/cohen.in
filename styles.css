@@ -1,0 +1,50 @@
+body {
+  background: linear-gradient(to right, #1e3c72, #2a5298);
+  font-family: 'Segoe UI', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.form-container {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 30px;
+  border-radius: 16px;
+  width: 400px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+h2 {
+  text-align: center;
+  color: #1e3c72;
+}
+
+form input {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+form button {
+  width: 100%;
+  padding: 10px;
+  background-color: #1e3c72;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+form button:hover {
+  background-color: #163a5f;
+}
+
+#regMsg, #loginMsg {
+  margin-top: 10px;
+  text-align: center;
+  font-weight: bold;
+}
+

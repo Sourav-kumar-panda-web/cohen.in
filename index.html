@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head> 
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Home</title> 
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="/css/style.css">
+  
+  <!-- JS -->
+  <script src="/js/typewriter.js" defer></script>
+  <script src="/js/home.js" defer></script>
+  <script src="/js/authCheck.js" defer></script>
+</head>
+
+<body>
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="logo">
+      <img src="/cohenolympiadschool.edu.git.in/assets/images/LOGO Lia 40.jpg" alt="Logo">
+    </div>
+
+    <nav class="nav-links" id="navLinks">
+      <a href="#Home">Home</a>
+      <a href="#Courses">Courses</a>
+      <a href="#test-series">Online Test Series</a>
+      <a href="#">Contact</a>
+      <a href="#About">About</a>
+
+      <!-- Auth Buttons -->
+      <div id="user-buttons">
+  <button id="loginBtn" onclick="window.location.href='/login'">Login</button>
+  <button id="adminLoginBtn" onclick="window.location.href='/admin-login'">Admin Login</button>
+  <button id="logoutBtn" onclick="logout()" style="display:none;">Logout</button>
+</div>
+<div class="hamburger" onclick="toggleMenu()">☰</div>
+  </header>
+  <!-- page1 -->
+ <section id="Home" class="hero">
+  <div class="hero-content">
+    <div class="anup-card">
+      <img src="cohenolympiadschool.edu.git.in\assets\images\8.png" alt="Jyoti Sir" class="anup-image">
+      <div class="anup-info">
+        <h2>Learn from <span class="highlight">Jyoti sir</span></h2>
+        <ul>
+          <li>✔️ 24+ Years of Experience</li>
+          <li>✔️ Produced 2500+ IITians in Odisha </li>
+          <li>✔️ Designed Best Math Crash Course for IIT JEE</li>
+        </ul>
+      </div>
+    </div>
+    <h1 class="main-heading">
+      <span id="typewriter" class="typewriter-text"></span>
+    </h1>
+    <h2 class="sub-heading">When Done With <span class="highlight">JYOTI SIR</span></h2>
+  </div>
+</section>
+
+<script src="typewriter.js"></script>
+
+<!-- page2 --> 
+  <section id="results" class="results-section">
+    <div class="result-card">
+      <img src="COS LOGO.png" alt="JEE Map Result" class="result-image">
+      <p class="small-tag">JEE MAIN 2025</p>
+      <h2 class="result-title">Our Result: The Choice of Toppers</h2>
+      <div class="result-stats">
+        <div class="stat-box">
+          <h3>2156</h3>
+          <p>Students scored <span class="highlight">99+ percentile</span> overall in JEE Main 2025 (January)</p>
+        </div>
+        <div class="stat-box">
+          <h3>192</h3>
+          <p>Students scored <span class="highlight">100 percentile</span> in one or more subjects</p>
+        </div>
+        <div class="stat-box">
+          <h3>11</h3>
+          <p>Students scored <span class="highlight">All India Rank (AIR)</span> under 100</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- page 3  -->
+  <section id="testimonials" class="testimonial-section">
+    <div class="testimonial-wrapper">
+      <div class="testimonial-text">
+        <h2>Trusted by<br>
+          <span class="highlight">thousands</span> of<br>
+          <span class="highlight">students</span> & their<br>
+          <span class="highlight">parents</span> across<br>
+          the nation
+        </h2>
+      </div>
+      <div class="testimonial-list">
+        <!-- Repeat this .testimonial-card block for each student -->
+        <div class="testimonial-card">
+          <video controls poster="ChatGPT Image Apr 18, 2025, 07_13_08 PM - Copy - Copy.png">
+            <source src="13432587_3840_2160_30fps.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+          <p>Thanks to Cohen Olympiad School for such a wonderful course. It helped me boost my concepts & score well.</p>
+          <strong>Alok Kanodia</strong><br>
+          <span class="student-badge">99.4% PERCENTILE</span>
+        </div>
+  
+        <div class="testimonial-card">
+          <video controls poster="student2.jpg">
+            <source src="student2.mp4" type="video/mp4">
+          </video>
+          <p>I cracked JEE with ease. I'm highly thankful to Cohen Olympiad School & Jyoti sir .</p>
+          <strong>Kunal Jain</strong><br>
+          <span class="student-badge">99.2% PERCENTILE</span>
+        </div>
+  
+        <!-- Add more .testimonial-card blocks as needed -->
+      </div>
+    </div>
+  </section>
+  <!-- page 4 -->
+  <section id="Courses" class="courses-section">
+    <div class="section-label">Mathematics</div>
+    <h2 class="section-title">Courses for <span class="highlight">2025</span></h2>
+  
+    <div class="card-container">
+      <!-- Card 1 -->
+      <div class="course-card">
+        <div class="badge">Upcoming batch for 2026</div>
+        <img src="jee-main.png" alt="">
+        <h3>JEE Main Crash Course</h3>
+        <p>The most trusted online Crash Course for Math </p>
+       <a href="courses1.html" class="join-now-button" data-course="jee-main-details.html">Join Now →</a>
+
+
+      </div>
+  
+      <!-- Card 2 -->
+      <div class="course-card">
+        <div class="badge red">Just lauched (dd/mm/yyyy)</div>
+        <img src="jee-advanced.png" alt="">
+        <h3>JEE Advanced Crash Course</h3>
+        <p>For those who want only IIT & nothing else!</p>
+        <!-- Original page (like index.html) -->
+<a href="courses2.html" class="join-now-button" data-course="jee-main-details.html">Join Now →</a>
+
+
+
+      </div>
+  
+      <!-- Card 3 -->
+      <div class="course-card">
+        <div class="badge red">Just Launched (dd/mm/yyyy)</div>
+        <img src="jee-advanced.png" alt="">
+        <h3>Olympiad </h3>
+        <p>Let’s go to BITS Pilani! Includes Eng & LR.</p>
+        <a href="courses3.html" class="join-now-button" data-course="jee-main-details.html">Join Now →</a>
+
+      </div>
+    </div>
+  </section>
+  
+  <section id="test-series" class="test-series-section">
+    <div class="section-label">All Subjects</div>
+    <h2 class="section-title">Test Series for <span class="highlight">2025</span> & <span class="highlight">2026</span></h2>
+  
+    <div class="card-container">
+      <!-- Card 1 -->
+      <div class="course-card">
+        <div class="badge red">NewBatch</div>
+        <h3>JEE Main 2026 Test Series</h3>
+        <p>Achieve that 99+ Percentile in JEE Main 2026</p>
+        <a href="courses1.html">Join Now →</a>
+      </div>
+  
+      <!-- Card 2 -->
+      <div class="course-card">
+        <div class="badge red">New Batch</div>
+        <h3>JEE Advanced 2026 Test Series</h3>
+        <p>Make your way into IITs with one of the best test series</p>
+        <a href="courses2.html">Join Now →</a>
+      </div>
+  
+      <!-- Card 3 -->
+      <div class="course-card">
+        <div class="badge red">New  Batch</div>
+        <h3>Olympiad 2026 Test Series</h3>
+        <p>For a top percentile & top rank!</p>
+        <a href="courses3.html">Join Now →</a>
+      </div>
+    </div>
+  </section>
+  <!-- page 5  -->
+  <section id="materials" class="study-section">
+    <div class="section-label">Downloadable notes </div>
+    <h2 class="section-title">Study Materials <span class="highlight">(Free)</span></h2>
+  
+    <div class="material-grid">
+      <!-- Card 1 -->
+      <div class="material-card">
+        <div class="icon blue">📖</div>
+        <h3>Chapter wise </h3>
+        <p>Watch free video lectures & solve practice sheets</p>
+        <a href="notes.html">Download →</a>
+      </div>
+  
+      <!-- Card 2 -->
+      <div class="material-card">
+        <div class="icon blue">📚</div>
+        <h3>LIA App</h3>
+        <p>Practice chapter-wise previous year questions of JEE, NEET, NDA, etc. for free!</p>
+        <a href="notes.html">Download →</a>
+      </div>
+  
+      <!-- Card 3 -->
+      <div class="material-card">
+        <div class="icon red">🗒️</div>
+        <h3>JEE Main Chapter-wise Questions</h3>
+        <p>Download chapter-wise question bank of JEE Main Previous Year Papers</p>
+        <a href="notes.html">Download →</a>
+      </div>
+  
+      <!-- Card 4 -->
+      <div class="material-card">
+        <div class="icon green">📖</div>
+        <h3>JEE Main Previous Year Papers</h3>
+        <p>Download JEE Main Previous Year Papers with solutions</p>
+        <a href="notes.html">Download →</a>
+      </div>
+  
+      <!-- Card 5 -->
+      <div class="material-card">
+        <div class="icon orange">📒</div>
+        <h3>JEE Advanced Previous Year Papers</h3>
+        <p>Download JEE Advanced Previous Year Papers with solutions</p>
+        <a href="notes.html">Download →</a>
+      </div>
+    </div>
+  </section>
+  
+  <footer id="About" class="site-footer">
+    <div class="footer-logo"><img src="LOGO Lia 40.jpg" alt=""></div>
+    <div class="hashtag">#LearnSmartWithLIA</div>
+    <p>© LIA - Learning Involving All. All rights reserved.</p>
+    <div class="socials">
+        <span>Follow us:</span>
+        <a href="https://twitter.com" class="social-btn"><img src="twitter.png" alt="Twitter"></a>
+        <a href="https://facebook.com" class="social-btn"><img src="facebook.png" alt="Facebook"></a>
+        <a href="https://linkedin.com" class="social-btn"><img src="linkedin.png" alt="LinkedIn"></a>
+        <a href="https://instagram.com" class="social-btn"><img src="instagram.png" alt="Instagram"></a>
+        <a href="https://threads.net" class="social-btn"><img src="threads.png" alt="Threads"></a>
+        <a href="https://play.google.com" class="social-btn"><img src="play.png" alt="Playstore"></a>
+        <button id="referralBtn" class="referral-btn">🎁 Referral Program</button>
+      </div>
+    <div class="footer-links">
+      <a href="#">About Us</a>
+      <a href="#">Contact Us</a>
+      <a href="#">Shipping Policy</a>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms & Conditions</a>
+    </div>
+    
+  </footer>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+
+<script>
+  const currentUser = "<%= username || '' %>";
+</script>
+<script>
+  async function checkLoginStatus() {
+    try {
+      const response = await fetch('/check-login');
+      const data = await response.json();
+
+      if (data.loggedIn) {
+        document.getElementById('logoutBtn').style.display = 'inline-block';
+        document.getElementById('loginBtn').style.display = 'none';
+        document.getElementById('adminLoginBtn').style.display = 'none';
+      } else {
+        document.getElementById('logoutBtn').style.display = 'none';
+        document.getElementById('loginBtn').style.display = 'inline-block';
+        document.getElementById('adminLoginBtn').style.display = 'inline-block';
+      }
+    } catch (error) {
+      console.error("Login check failed:", error);
+    }
+  }
+
+  async function logout() {
+    await fetch('/logout', { method: 'POST' });
+    window.location.href = '/';
+  }
+
+  // Run on page load
+  window.onload = checkLoginStatus;
+</script>
+
+</body>
+</html>

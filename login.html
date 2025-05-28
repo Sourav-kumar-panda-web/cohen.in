@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Student Login</title>
+  <link rel="stylesheet" href="/assets/css/login.css" />
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: #fff;
+    }
+    .form-container {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 40px 30px;
+      border-radius: 15px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+      animation: fadeIn 0.6s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    h2 { margin-bottom: 25px; font-size: 24px; }
+    .form-group { margin-bottom: 20px; text-align: left; }
+    label { font-size: 14px; display: block; margin-bottom: 6px; }
+    input {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+    }
+    button {
+      margin-top: 10px;
+      width: 100%;
+      padding: 12px;
+      background-color: #00c6ff;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover { background-color: #009acf; }
+    button:disabled { background-color: #777; cursor: not-allowed; }
+    #loginMsg {
+      margin-top: 15px;
+      color: #ff4d4d;
+      font-weight: bold;
+    }
+    #loader {
+      margin-top: 10px;
+      color: #00ffcc;
+      font-style: italic;
+      display: none;
+    }
+    #question-box {
+      display: block;
+      margin-bottom: 20px;
+    }
+    #loginForm {
+      display: none;
+    }
+    .choice-buttons {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+    .choice-buttons button {
+      width: 45%;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>👋 Welcome to Student Portal</h2>
+
+    <!-- Question Box -->
+    <div id="question-box">
+      <p>Are you a new user?</p>
+      <div class="choice-buttons">
+        <button onclick="redirectToRegister()">Yes</button>
+        <button onclick="showLoginForm()">No</button>
+      </div>
+    </div>
+
+    <!-- Login Form -->
+    <form id="loginForm">
+      <h3>🔐 Login</h3>
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" placeholder="Enter username" required />
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Enter password" required />
+      </div>
+      <button type="submit" id="loginBtn">Login</button>
+      <div id="loader">⏳ Logging in...</div>
+      <div id="loginMsg"></div>
+    </form>
+  </div>
+
+  <script>
+    function redirectToRegister() {
+      window.location.href = "/register.html";
+    }
+
+    function showLoginForm() {
+      document.getElementById("question-box").style.display = "none";
+      document.getElementById("loginForm").style.display = "block";
+    }
+
+    document.getElementById("loginForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value;
+      const loginBtn = document.getElementById("loginBtn");
+      const loader = document.getElementById("loader");
+      const msgEl = document.getElementById("loginMsg");
+
+      loginBtn.disabled = true;
+      loader.style.display = "block";
+      msgEl.textContent = "";
+
+      fetch("/login-student", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      })
+      .then(res => res.json())
+      .then(data => {
+        loginBtn.disabled = false;
+        loader.style.display = "none";
+
+        if (data.success) {
+          sessionStorage.setItem("isLoggedIn", "true");
+          sessionStorage.setItem("username", username);
+          window.location.href = "/index.html";
+        } else {
+          msgEl.textContent = "❌ Login failed: " + data.message;
+        }
+      })
+      .catch(() => {
+        loginBtn.disabled = false;
+        loader.style.display = "none";
+        msgEl.textContent = "⚠️ Error connecting to server.";
+      });
+    });
+  </script>
+</body>
+</html>
+
+
+
+
+

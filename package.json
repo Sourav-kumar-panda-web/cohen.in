@@ -1,22 +1,29 @@
 {
-  "dependencies": {
-    "bcrypt": "^6.0.0",
-    "better-sqlite3": "^11.10.0",
-    "body-parser": "^2.2.0",
-    "cors": "^2.8.5",
-    "express": "^5.1.0",
-    "express-session": "^1.18.1",
-    "sqlite3": "^5.1.7"
+  "name": "yallist",
+  "version": "4.0.0",
+  "description": "Yet Another Linked List",
+  "main": "yallist.js",
+  "directories": {
+    "test": "test"
   },
-  "name": "newcohenolympiadschoolwebsite",
-  "version": "1.0.0",
-  "main": "admin.js",
+  "files": [
+    "yallist.js",
+    "iterator.js"
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "tap": "^12.1.0"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "test": "tap test/*.js --100",
+    "preversion": "npm test",
+    "postversion": "npm publish",
+    "postpublish": "git push origin --all; git push origin --tags"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": ""
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/isaacs/yallist.git"
+  },
+  "author": "Isaac Z. Schlueter <i@izs.me> (http://blog.izs.me/)",
+  "license": "ISC"
 }

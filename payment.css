@@ -1,0 +1,71 @@
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 20px;
+}
+
+.container {
+  max-width: 500px;
+  background: white;
+  padding: 30px;
+  margin: auto;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
+
+h2 {
+  text-align: center;
+  color: #333;
+}
+
+.payment-methods {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.qr-code img {
+  width: 200px;
+  margin-bottom: 10px;
+}
+
+label {
+  display: block;
+  margin-top: 15px;
+  color: #444;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+button {
+  margin-top: 20px;
+  width: 100%;
+  background-color: #e85d04;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #d65403;
+}
+
+#confirmation {
+  margin-top: 20px;
+  text-align: center;
+  color: green;
+  font-weight: bold;
+}
+
+.hidden {
+  display: none;
+}

@@ -1,0 +1,92 @@
+<!-- admin-assignments.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Assign Tasks to Students</title>
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <h2>Assign Task to a Student</h2>
+  <form id="assignForm">
+    <input type="text" name="student_phone" placeholder="Student Phone" required>
+    <input type="text" name="title" placeholder="Assignment Title" required>
+    <button type="submit">Assign</button>
+  </form>
+
+  <h3>All Assignments</h3>
+  <table id="assignmentsTable" border="1">
+    <thead>
+      <tr><th>ID</th><th>Phone</th><th>Title</th><th>Status</th><th>Actions</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    const form = document.getElementById('assignForm');
+    const tableBody = document.querySelector('#assignmentsTable tbody');
+
+    async function loadAssignments() {
+      const res = await fetch('/all-assignments');
+      const data = await res.json();
+      tableBody.innerHTML = '';
+      data.forEach(row => {
+        tableBody.innerHTML += `
+          <tr>
+            <td>${row.id}</td>
+            <td>${row.student_phone}</td>
+            <td>${row.title}</td>
+            <td>${row.status}</td>
+            <td>
+              <button onclick="edit(${row.id}, '${row.title}')">Edit</button>
+              <button onclick="del(${row.id})">Delete</button>
+            </td>
+          </tr>`;
+      });
+    }
+
+    form.onsubmit = async (e) => {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(form));
+      const res = await fetch('/assign-task', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+      });
+      const result = await res.json();
+      alert(result.message);
+      form.reset();
+      loadAssignments();
+    };
+
+    async function edit(id, oldTitle) {
+      const newTitle = prompt("Enter new title:", oldTitle);
+      if (newTitle) {
+        const res = await fetch('/edit-assignment', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({ id, title: newTitle })
+        });
+        const result = await res.json();
+        alert(result.message);
+        loadAssignments();
+      }
+    }
+
+    async function del(id) {
+      if (confirm("Delete this assignment?")) {
+        const res = await fetch('/delete-assignment', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({ id })
+        });
+        const result = await res.json();
+        alert(result.message);
+        loadAssignments();
+      }
+    }
+
+    loadAssignments();
+  </script>
+</body>
+</html>

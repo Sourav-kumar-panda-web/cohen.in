@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f9f9f9;
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background: white;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+    th, td {
+      padding: 12px;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+    th {
+      background: #333;
+      color: #fff;
+    }
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+  <h2>Admin Dashboard</h2>
+  <table id="userTable">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>UTR</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    
+    document.addEventListener("DOMContentLoaded", async () => {
+      const tbody = document.querySelector("#userTable tbody");
+
+      try {
+        const res = await fetch("/admin/users");
+        if (!res.ok) throw new Error("Failed to fetch users");
+        
+        const users = await res.json();
+
+        if (users.length === 0) {
+          const emptyRow = document.createElement("tr");
+          emptyRow.innerHTML = `<td colspan="4">No users found.</td>`;
+          tbody.appendChild(emptyRow);
+          return;
+        }
+
+        users.forEach(user => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${user.name || "-"}</td>
+            <td>${user.email || "-"}</td>
+            <td>${user.phone || "-"}</td>
+            <td>${user.utr || "Not submitted"}</td>
+          `;
+          tbody.appendChild(row);
+        });
+
+      } catch (err) {
+        console.error(err);
+        const errorRow = document.createElement("tr");
+        errorRow.innerHTML = `<td colspan="4" style="color: red;">Error loading users</td>`;
+        tbody.appendChild(errorRow);
+      }
+    });
+    fetch('/admin-users')
+  .then(res => {
+    if (!res.ok) throw new Error('Error loading users');
+    return res.json();
+  })
+  .then(users => {
+    // render user cards
+  })
+  .catch(err => {
+    alert('Error loading users');
+    console.error(err);
+  });
+
+  </script>
+</body>
+</html>
+
+
+

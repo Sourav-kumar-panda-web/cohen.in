@@ -1,0 +1,53 @@
+/* admin.css */
+body {
+  font-family: Arial, sans-serif;
+  background: #f0f0f0;
+  margin: 0;
+  padding: 0;
+}
+header {
+  background: #333;
+  color: #fff;
+  padding: 1rem;
+  position: relative;
+}
+h1 {
+  margin: 0;
+}
+main {
+  padding: 20px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+}
+th, td {
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+th {
+  background: #222;
+  color: #fff;
+}
+button {
+  background-color: crimson;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+.login-container {
+  max-width: 400px;
+  margin: 100px auto;
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px #aaa;
+}
+input, button {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quizrr - JEE Main Test Series 2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: #1e2a50;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      text-align: center;
+    }
+
+    header {
+      width: 100%;
+      padding: 20px 40px;
+      background-color: #14213d;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo img {
+      height: 40px;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+    }
+
+    nav a, nav button {
+      color: white;
+      margin-left: 20px;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 8px 12px;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    nav a:hover, nav button:hover {
+      background-color: #2c3e75;
+    }
+
+    .refer-btn {
+      background-color: #3ecf8e;
+      color: #1e2a50;
+      font-weight: bold;
+    }
+
+    .badge {
+      background: #2c3e75;
+      border-radius: 5px;
+      padding: 5px 10px;
+      font-size: 12px;
+      margin: 20px 0 10px;
+      display: inline-block;
+    }
+
+    h1 {
+      font-size: 32px;
+      font-weight: 700;
+      line-height: 1.4;
+      margin: 0 20px;
+    }
+
+    .highlight {
+      border-bottom: 4px solid #f4d35e;
+      display: inline-block;
+    }
+
+    .buttons {
+      margin: 30px 0;
+    }
+
+    .buttons button {
+      padding: 12px 20px;
+      margin: 10px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      color: white;
+      font-weight: 500;
+    }
+
+    .green-btn {
+      background-color: #3ecf8e;
+    }
+
+    .blue-btn {
+      background-color: #4f83ff;
+    }
+
+    .red-btn {
+      background-color: #f25f5c;
+    }
+
+    .note {
+      font-size: 14px;
+      color: #bbb;
+    }
+
+    main {
+      padding: 40px 20px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .payment-section {
+  margin-top: 40px;
+  border-top: 1px solid #2c3e75;
+  padding-top: 30px;
+}
+
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <a href="index.html">
+        <img src="LOGO Lia 40.jpg" alt="Quizrr Logo" />
+      </a>
+    </div>
+    <nav>
+      <a href="index.html">Back to Home</a>
+      <a href="#">Contact Us</a>
+      <button class="refer-btn">Refer a Friend</button>
+    </nav>
+  </header>
+
+  <main>
+    <div class="badge">✨ [New] May Batch</div>
+    <h1>
+      <span class="highlight">Most Relevant</span> Online Test Series<br>
+      for <strong>JEE Main 2026</strong>
+    </h1>
+
+    <p>Choose your test series:</p>
+
+    <div class="buttons">
+      <button class="green-btn">JEE Main Test Series for Dropper</button>
+      <button class="blue-btn">JEE Main Test Series for Class 12</button>
+    </div>
+
+     <p class="note">If you are looking for JEE Main + Advanced test series:</p>
+    <button class="red-btn">Click here for JEE Main + Advanced Test Series</button>
+  </main>
+   <section class="payment-section">
+      <h2 style="margin-top: 40px; font-size: 26px;">📌 Course Subscription</h2>
+      <p style="font-size: 18px;">Pay only <strong>₹499</strong> for full access to all test series, practice sheets, and performance tracking.</p>
+      <ul style="text-align: left; max-width: 600px; margin: 20px auto; font-size: 16px; line-height: 1.8;">
+        <li>✔️ 30+ Full Syllabus Mock Tests</li>
+        <li>✔️ Chapter-wise Practice Sets with Instant Solutions</li>
+        <li>✔️ All India Rank & Performance Analysis</li>
+        <li>✔️ Expert Video Solutions & Tips</li>
+        <li>✔️ Access till JEE Main 2026</li>
+      </ul>
+      <a href="payment.html">
+        <button class="green-btn" style="font-size: 18px; padding: 14px 28px;">💳 Pay Now & Get Access</button>
+      </a>
+    </section>
+    <section style="margin-top: 30px; padding: 20px; background: #f0f0f0; border-radius: 8px;">
+  <h3>Enter UTR Number After Payment</h3>
+  <form id="utrForm">
+    <input type="text" id="utrInput" placeholder="Enter UTR number" required>
+    <button type="submit">Submit UTR</button>
+  </form>
+  <p id="utrMessage" style="color: green; margin-top: 10px;"></p>
+</section>
+
+<script src="utr.js"></script>
+
+</body>
+</html>
