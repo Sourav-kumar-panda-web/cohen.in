@@ -4,24 +4,29 @@ const session = require('express-session');
 const bcrypt = require('bcrypt');
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
+const fs = require('fs');
 const app = express();
 const PORT = 3000;
 
-// ---------- DATABASE PATH ----------
-const dbPath = path.join(__dirname, "database", "students.db");
+// ---------- DATABASE SETUP ----------
+const dbDir = path.join(__dirname, "database");
+if (!fs.existsSync(dbDir)) fs.mkdirSync(dbDir);
+
+const dbPath = path.join(dbDir, "students.db");
 
 // ---------- MIDDLEWARE ----------
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(session({
-  secret: 'your_secret_key',
+  secret: 'your_secret_key', // Change to strong secret in production
   resave: false,
   saveUninitialized: false,
-  cookie: { httpOnly: true, maxAge: 3600000 } // secure and expiring in 1 hour
+  cookie: { httpOnly: true, maxAge: 60 * 60 * 1000 } // 1 hour
 }));
 app.use(express.static(path.join(__dirname, 'views')));
-app.use('/css', express.static(path.join(__dirname, 'assets', 'css')));
-app.use('/js', express.static(path.join(__dirname, 'assets', 'js')));
+app.use('/css', express.static(path.join(__dirname, 'assets/css')));
+app.use('/js', express.static(path.join(__dirname, 'assets/js')));
+app.use('/images', express.static(path.join(__dirname, 'assets/images')));
 
 // ---------- DATABASE CONNECTION ----------
 const db = new sqlite3.Database(dbPath, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
@@ -77,12 +82,12 @@ bcrypt.hash(defaultAdminPassword, 10, (err, hash) => {
 
 // ---------- MIDDLEWARE: AUTH ----------
 function adminAuthMiddleware(req, res, next) {
-  if (req.session && req.session.adminId) return next();
+  if (req.session?.adminId) return next();
   res.status(401).json({ error: 'Unauthorized admin' });
 }
 
 function studentAuthMiddleware(req, res, next) {
-  if (req.session && req.session.studentId) return next();
+  if (req.session?.studentId) return next();
   res.status(401).json({ error: 'Unauthorized student' });
 }
 
@@ -95,19 +100,19 @@ app.get("/index.html", studentAuthMiddleware, (req, res) => res.sendFile(path.jo
 
 // ---------- STUDENT REGISTRATION ----------
 app.post('/register-student', async (req, res) => {
-  const {
-    name, email, username, password, address, phone,
-    school, studentClass, division, percentage,
-    subjects, hobbies, parent_phone,
-    progress_math, progress_science, progress_english
-  } = req.body;
-
-  if (!name || !email || !username || !password) {
-    return res.status(400).send("Required fields are missing.");
-  }
-
   try {
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const {
+      name, email, username, password, address, phone,
+      school, studentClass, division, percentage,
+      subjects, hobbies, parent_phone,
+      progress_math, progress_science, progress_english
+    } = req.body;
+
+    if (!name || !email || !username || !password) {
+      return res.status(400).send("Required fields are missing.");
+    }
+
+    const hashedPassword = await bcrypt.hash(password.trim(), 10);
     const stmt = db.prepare(`
       INSERT INTO students (
         name, email, username, password, address, phone,
@@ -117,18 +122,18 @@ app.post('/register-student', async (req, res) => {
     `);
 
     stmt.run([
-      name, email, username, hashedPassword, address, phone,
-      school, studentClass, division, percentage, subjects,
-      hobbies, parent_phone, progress_math || 0, progress_science || 0, progress_english || 0
+      name.trim(), email.trim(), username.trim(), hashedPassword, address.trim(), phone.trim(),
+      school.trim(), studentClass.trim(), division.trim(), parseFloat(percentage), subjects.trim(),
+      hobbies.trim(), parent_phone.trim(), progress_math || 0, progress_science || 0, progress_english || 0
     ], function (err) {
       if (err) {
-        console.error("Registration error:", err.message);
+        console.error("❌ Registration error:", err.message);
         return res.status(500).send("Error registering student.");
       }
       res.status(200).send("Student registered successfully.");
     });
   } catch (err) {
-    console.error("Hashing error:", err.message);
+    console.error("❌ Hashing error:", err.message);
     res.status(500).send("Server error");
   }
 });
@@ -151,10 +156,11 @@ app.post('/login-student', (req, res) => {
   });
 });
 
+// ---------- SESSION CHECK ----------
 app.get('/check-login', (req, res) => {
-  if (req.session.userType === 'student') {
+  if (req.session?.userType === 'student') {
     res.json({ loggedIn: true, type: 'student' });
-  } else if (req.session.userType === 'admin') {
+  } else if (req.session?.userType === 'admin') {
     res.json({ loggedIn: true, type: 'admin' });
   } else {
     res.json({ loggedIn: false });
@@ -184,7 +190,7 @@ app.get('/student-dashboard-data', studentAuthMiddleware, (req, res) => {
   });
 });
 
-// ---------- UPDATE STUDENT PROGRESS ----------
+// ---------- UPDATE PROGRESS ----------
 app.post('/update-progress', studentAuthMiddleware, (req, res) => {
   const { math, science, english } = req.body;
 
@@ -266,16 +272,14 @@ app.post('/delete-assignment', adminAuthMiddleware, (req, res) => {
 
 // ---------- STUDENT DETAILS & DELETE ----------
 app.get('/student-details/:id', adminAuthMiddleware, (req, res) => {
-  const studentId = req.params.id;
-  db.get('SELECT * FROM students WHERE id = ?', [studentId], (err, row) => {
+  db.get('SELECT * FROM students WHERE id = ?', [req.params.id], (err, row) => {
     if (err) return res.status(500).json({ error: 'Fetch error' });
     res.json(row);
   });
 });
 
 app.delete('/admin/users/:id', adminAuthMiddleware, (req, res) => {
-  const { id } = req.params;
-  db.run('DELETE FROM students WHERE id = ?', [id], function (err) {
+  db.run('DELETE FROM students WHERE id = ?', [req.params.id], function (err) {
     if (err) return res.status(500).json({ error: 'Delete Error' });
     res.json({ success: true });
   });

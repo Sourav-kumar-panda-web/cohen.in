@@ -1,29 +1,18 @@
 {
-  "name": "yallist",
-  "version": "4.0.0",
-  "description": "Yet Another Linked List",
-  "main": "yallist.js",
-  "directories": {
-    "test": "test"
-  },
-  "files": [
-    "yallist.js",
-    "iterator.js"
-  ],
-  "dependencies": {},
-  "devDependencies": {
-    "tap": "^12.1.0"
-  },
+  "name": "payment-tracker",
+  "version": "1.0.0",
+  "main": "index.js",
   "scripts": {
-    "test": "tap test/*.js --100",
-    "preversion": "npm test",
-    "postversion": "npm publish",
-    "postpublish": "git push origin --all; git push origin --tags"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/isaacs/yallist.git"
-  },
-  "author": "Isaac Z. Schlueter <i@izs.me> (http://blog.izs.me/)",
-  "license": "ISC"
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "mongoose": "^8.14.2"
+  }
 }
