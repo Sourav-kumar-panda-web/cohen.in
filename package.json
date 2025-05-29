@@ -1,17 +1,22 @@
 {
-  "name": "student-portal",
+  "name": "student-admin-portal",
   "version": "1.0.0",
+  "description": "Student and Admin Portal with SQLite and Express",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
-    "express": "^4.18.2",
-    "sqlite3": "^5.1.7",
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.2",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
     "express-session": "^1.17.3",
-    "nodemailer": "^6.9.8",
-    "dotenv": "^16.3.1"
-  }
+    "sqlite3": "^5.1.7"
+  },
+  "engines": {
+    "node": ">=16"
+  },
+  "author": "Your Name",
+  "license": "MIT"
 }
