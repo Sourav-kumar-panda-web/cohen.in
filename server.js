@@ -6,7 +6,7 @@ const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 const fs = require('fs');
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // ---------- PATH SETUP ----------
 const rootDir = __dirname;
@@ -22,12 +22,13 @@ const assetsPath = path.join(rootDir, 'assets');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(session({
-  secret: 'your_secret_key',
+  secret: process.env.SESSION_SECRET || 'your_secret_key',
   resave: false,
   saveUninitialized: false,
-  cookie: { httpOnly: true, maxAge: 60 * 60 * 1000 } // 1 hour
+  cookie: { httpOnly: true, maxAge: 60 * 60 * 1000 }
 }));
 
+// Static Files
 app.use(express.static(viewsPath));
 app.use('/css', express.static(path.join(assetsPath, 'css')));
 app.use('/js', express.static(path.join(assetsPath, 'js')));
@@ -281,10 +282,14 @@ app.get('/student-details/:id', adminAuth, (req, res) => {
 
 // ---------- LOGOUT ----------
 app.get('/logout', (req, res) => {
-  req.session.destroy();
-  res.redirect('/login');
+  req.session.destroy((err) => {
+    if (err) return res.status(500).send('Logout failed');
+    res.redirect('/');
+  });
 });
 
 // ---------- START SERVER ----------
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
+});
+
