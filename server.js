@@ -8,27 +8,32 @@ const fs = require('fs');
 const app = express();
 const PORT = 3000;
 
-// ---------- DATABASE SETUP ----------
-const dbDir = path.join(__dirname, "database");
+// ---------- PATH SETUP ----------
+const rootDir = __dirname;
+const dbDir = path.join(rootDir, 'database');
 if (!fs.existsSync(dbDir)) fs.mkdirSync(dbDir);
 
-const dbPath = path.join(dbDir, "students.db");
+const dbPath = path.join(dbDir, 'students.db');
+const viewsPath = path.join(rootDir, 'views');
+const adminViewsPath = path.join(rootDir, 'admin-portal');
+const assetsPath = path.join(rootDir, 'assets');
 
 // ---------- MIDDLEWARE ----------
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(session({
-  secret: 'your_secret_key', // Change to strong secret in production
+  secret: 'your_secret_key',
   resave: false,
   saveUninitialized: false,
   cookie: { httpOnly: true, maxAge: 60 * 60 * 1000 } // 1 hour
 }));
-app.use(express.static(path.join(__dirname, 'views')));
-app.use('/css', express.static(path.join(__dirname, 'assets/css')));
-app.use('/js', express.static(path.join(__dirname, 'assets/js')));
-app.use('/images', express.static(path.join(__dirname, 'assets/images')));
 
-// ---------- DATABASE CONNECTION ----------
+app.use(express.static(viewsPath));
+app.use('/css', express.static(path.join(assetsPath, 'css')));
+app.use('/js', express.static(path.join(assetsPath, 'js')));
+app.use('/images', express.static(path.join(assetsPath, 'images')));
+
+// ---------- DATABASE INIT ----------
 const db = new sqlite3.Database(dbPath, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
   if (err) return console.error('❌ DB error:', err.message);
   console.log('✅ Connected to SQLite database');
@@ -73,30 +78,28 @@ db.serialize(() => {
 // ---------- DEFAULT ADMIN ----------
 const defaultAdminEmail = "admin@school.com";
 const defaultAdminPassword = "admin123";
-
 bcrypt.hash(defaultAdminPassword, 10, (err, hash) => {
   if (!err) {
     db.run(`INSERT OR IGNORE INTO admins (email, password) VALUES (?, ?)`, [defaultAdminEmail, hash]);
   }
 });
 
-// ---------- MIDDLEWARE: AUTH ----------
-function adminAuthMiddleware(req, res, next) {
+// ---------- AUTH MIDDLEWARE ----------
+function adminAuth(req, res, next) {
   if (req.session?.adminId) return next();
   res.status(401).json({ error: 'Unauthorized admin' });
 }
-
-function studentAuthMiddleware(req, res, next) {
+function studentAuth(req, res, next) {
   if (req.session?.studentId) return next();
   res.status(401).json({ error: 'Unauthorized student' });
 }
 
 // ---------- STATIC ROUTES ----------
 app.get("/", (req, res) => res.redirect("/login"));
-app.get("/login", (req, res) => res.sendFile(path.join(__dirname, "views", "login.html")));
-app.get("/register", (req, res) => res.sendFile(path.join(__dirname, "views", "register.html")));
-app.get("/admin-login", (req, res) => res.sendFile(path.join(__dirname, "admin-portal", "adminLogin.html")));
-app.get("/index.html", studentAuthMiddleware, (req, res) => res.sendFile(path.join(__dirname, "views", "index.html")));
+app.get("/login", (req, res) => res.sendFile(path.join(viewsPath, "login.html")));
+app.get("/register", (req, res) => res.sendFile(path.join(viewsPath, "register.html")));
+app.get("/admin-login", (req, res) => res.sendFile(path.join(adminViewsPath, "adminLogin.html")));
+app.get("/index.html", studentAuth, (req, res) => res.sendFile(path.join(viewsPath, "index.html")));
 
 // ---------- STUDENT REGISTRATION ----------
 app.post('/register-student', async (req, res) => {
@@ -168,7 +171,7 @@ app.get('/check-login', (req, res) => {
 });
 
 // ---------- STUDENT DASHBOARD ----------
-app.get('/student-dashboard-data', studentAuthMiddleware, (req, res) => {
+app.get('/student-dashboard-data', studentAuth, (req, res) => {
   db.get('SELECT * FROM students WHERE id = ?', [req.session.studentId], (err, student) => {
     if (err || !student) return res.json({ success: false });
 
@@ -184,16 +187,15 @@ app.get('/student-dashboard-data', studentAuthMiddleware, (req, res) => {
           science: student.science_progress,
           english: student.english_progress
         },
-        examScores: [60, 70, 80] // demo scores
+        examScores: [60, 70, 80] // example scores
       });
     });
   });
 });
 
 // ---------- UPDATE PROGRESS ----------
-app.post('/update-progress', studentAuthMiddleware, (req, res) => {
+app.post('/update-progress', studentAuth, (req, res) => {
   const { math, science, english } = req.body;
-
   db.run(`
     UPDATE students
     SET math_progress = ?, science_progress = ?, english_progress = ?
@@ -207,7 +209,6 @@ app.post('/update-progress', studentAuthMiddleware, (req, res) => {
 // ---------- ADMIN LOGIN ----------
 app.post('/admin-login', (req, res) => {
   const { email, password } = req.body;
-
   db.get('SELECT * FROM admins WHERE email = ?', [email], (err, admin) => {
     if (err || !admin) return res.status(401).json({ success: false, message: 'Invalid credentials' });
 
@@ -223,15 +224,15 @@ app.post('/admin-login', (req, res) => {
   });
 });
 
-// ---------- ADMIN ROUTES ----------
-app.get('/admin-dashboard-data', adminAuthMiddleware, (req, res) => {
+// ---------- ADMIN DASHBOARD ----------
+app.get('/admin-dashboard-data', adminAuth, (req, res) => {
   db.all('SELECT id, name, school, phone FROM students', (err, rows) => {
     if (err) return res.status(500).json({ error: 'Failed to load students' });
     res.json(rows);
   });
 });
 
-app.get('/admin-users', adminAuthMiddleware, (req, res) => {
+app.get('/admin-users', adminAuth, (req, res) => {
   db.all(`SELECT id, name, school, phone FROM students`, [], (err, rows) => {
     if (err) return res.status(500).send('Error loading users');
     res.json(rows);
@@ -239,7 +240,7 @@ app.get('/admin-users', adminAuthMiddleware, (req, res) => {
 });
 
 // ---------- ASSIGNMENTS ----------
-app.post('/assign-task', adminAuthMiddleware, (req, res) => {
+app.post('/assign-task', adminAuth, (req, res) => {
   const { student_phone, title } = req.body;
   db.run(`INSERT INTO assignments (student_phone, title) VALUES (?, ?)`, [student_phone, title], (err) => {
     if (err) return res.json({ success: false, message: 'DB Error' });
@@ -247,14 +248,14 @@ app.post('/assign-task', adminAuthMiddleware, (req, res) => {
   });
 });
 
-app.get('/all-assignments', adminAuthMiddleware, (req, res) => {
+app.get('/all-assignments', adminAuth, (req, res) => {
   db.all(`SELECT * FROM assignments`, (err, rows) => {
     if (err) return res.json([]);
     res.json(rows);
   });
 });
 
-app.post('/edit-assignment', adminAuthMiddleware, (req, res) => {
+app.post('/edit-assignment', adminAuth, (req, res) => {
   const { id, title } = req.body;
   db.run(`UPDATE assignments SET title = ? WHERE id = ?`, [title, id], (err) => {
     if (err) return res.json({ success: false, message: 'Update error' });
@@ -262,7 +263,7 @@ app.post('/edit-assignment', adminAuthMiddleware, (req, res) => {
   });
 });
 
-app.post('/delete-assignment', adminAuthMiddleware, (req, res) => {
+app.post('/delete-assignment', adminAuth, (req, res) => {
   const { id } = req.body;
   db.run(`DELETE FROM assignments WHERE id = ?`, [id], (err) => {
     if (err) return res.json({ success: false, message: 'Delete error' });
@@ -270,29 +271,19 @@ app.post('/delete-assignment', adminAuthMiddleware, (req, res) => {
   });
 });
 
-// ---------- STUDENT DETAILS & DELETE ----------
-app.get('/student-details/:id', adminAuthMiddleware, (req, res) => {
+// ---------- STUDENT DETAILS ----------
+app.get('/student-details/:id', adminAuth, (req, res) => {
   db.get('SELECT * FROM students WHERE id = ?', [req.params.id], (err, row) => {
     if (err) return res.status(500).json({ error: 'Fetch error' });
     res.json(row);
   });
 });
 
-app.delete('/admin/users/:id', adminAuthMiddleware, (req, res) => {
-  db.run('DELETE FROM students WHERE id = ?', [req.params.id], function (err) {
-    if (err) return res.status(500).json({ error: 'Delete Error' });
-    res.json({ success: true });
-  });
-});
-
 // ---------- LOGOUT ----------
-app.post('/logout', (req, res) => {
-  req.session.destroy(() => {
-    res.json({ success: true });
-  });
+app.get('/logout', (req, res) => {
+  req.session.destroy();
+  res.redirect('/login');
 });
 
 // ---------- START SERVER ----------
-app.listen(PORT, () => {
-  console.log(`🚀 Server running at http://localhost:${PORT}`);
-});
+app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
