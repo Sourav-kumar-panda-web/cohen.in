@@ -26,6 +26,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: { httpOnly: true, maxAge: 60 * 60 * 1000 }
+  
 }));
 
 // Static Files
@@ -33,7 +34,7 @@ app.use(express.static(viewsPath));
 app.use('/css', express.static(path.join(assetsPath, 'css')));
 app.use('/js', express.static(path.join(assetsPath, 'js')));
 app.use('/images', express.static(path.join(assetsPath, 'images')));
-
+app.use(express.static('assets'));
 // ---------- DATABASE INIT ----------
 const db = new sqlite3.Database(dbPath, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
   if (err) return console.error('❌ DB error:', err.message);
@@ -101,7 +102,9 @@ app.get("/login", (req, res) => res.sendFile(path.join(viewsPath, "login.html"))
 app.get("/register", (req, res) => res.sendFile(path.join(viewsPath, "register.html")));
 app.get("/admin-login", (req, res) => res.sendFile(path.join(adminViewsPath, "adminLogin.html")));
 app.get("/index.html", studentAuth, (req, res) => res.sendFile(path.join(viewsPath, "index.html")));
-
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/views/index.html'); // serve your homepage
+});
 // ---------- STUDENT REGISTRATION ----------
 app.post('/register-student', async (req, res) => {
   try {
